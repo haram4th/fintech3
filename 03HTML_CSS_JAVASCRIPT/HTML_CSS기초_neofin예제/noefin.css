@@ -1,0 +1,349 @@
+/* NeoFin – minimal, modern, accessible CSS
+   Save as: neofin.css
+*/
+
+/* ------------------------------
+   0) Design Tokens
+--------------------------------*/
+:root{
+  --bg: #ffffff;
+  --text: #0b1220;
+  --muted: #64748b;            /* slate-500 */
+  --border: #e2e8f0;           /* slate-200 */
+  --fill: #f8fafc;             /* slate-50  */
+  --brand: #2563eb;            /* blue-600  */
+  --brand-weak: #dbeafe;       /* blue-100  */
+  --accent: #16a34a;           /* green-600 */
+  --danger: #dc2626;           /* red-600   */
+  --focus: #60a5fa;            /* blue-400  */
+  --ring: 3px;
+  --radius: 12px;
+  --shadow: 0 10px 25px rgba(2,6,23,.06), 0 2px 8px rgba(2,6,23,.05);
+
+  --maxw: 960px;
+  --space-1: .25rem;
+  --space-2: .5rem;
+  --space-3: .75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+
+  --font-sys: system-ui,-apple-system,Segoe UI,Roboto,Pretendard,Apple SD Gothic Neo,Noto Sans KR,Helvetica,Arial,sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+/* Dark Mode (auto) */
+@media (prefers-color-scheme: dark) {
+  :root{
+    --bg: #0b1220;
+    --text: #e5e7eb;
+    --muted: #94a3b8;
+    --border: #22304a;
+    --fill: #0f172a;
+    --brand: #60a5fa;
+    --brand-weak: #172554;
+    --accent: #22c55e;
+    --danger: #ef4444;
+    --focus: #93c5fd;
+    --shadow: 0 12px 30px rgba(0,0,0,.35), 0 2px 10px rgba(0,0,0,.25);
+  }
+}
+
+/* ------------------------------
+   1) Reset & Base
+--------------------------------*/
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+html { hanging-punctuation: first last; }
+body{
+  font-family: var(--font-sys);
+  line-height: 1.6;
+  color: var(--text);
+  background: linear-gradient(180deg, var(--fill), var(--bg) 18%);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--brand); text-decoration: none; }
+a:hover { text-decoration: underline; }
+abbr[title] { text-decoration: underline dotted; cursor: help; }
+hr{
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: var(--space-8) 0;
+}
+
+/* Container */
+header, main, footer{
+  width: min(100% - 2rem, var(--maxw));
+  margin-inline: auto;
+}
+header { padding: var(--space-8) 0 var(--space-4); }
+main   { padding: 0 0 var(--space-8); }
+footer { padding: var(--space-8) 0; }
+
+/* ------------------------------
+   2) Typography
+--------------------------------*/
+h1, h2, h3 {
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  margin: 0 0 var(--space-3);
+}
+h1{ font-size: clamp(1.8rem, 2.4vw + .9rem, 2.6rem); }
+h2{ font-size: clamp(1.35rem, 1.3vw + .7rem, 1.75rem); margin-top: var(--space-8); }
+h3{ font-size: clamp(1.1rem, .8vw + .7rem, 1.25rem); margin-top: var(--space-6); }
+
+p, ul, ol, dl, table, figure, blockquote { margin: 0 0 var(--space-4); }
+small { color: var(--muted); }
+
+blockquote{
+  padding: var(--space-4);
+  border-left: 4px solid var(--brand);
+  background: color-mix(in srgb, var(--brand-weak) 45%, transparent);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+/* Inline helpers */
+code, kbd, samp { font-family: var(--mono); font-size: .95em; }
+kbd{
+  padding: 0 .45em;
+  border: 1px solid var(--border);
+  border-bottom-width: 2px;
+  border-radius: 6px;
+  background: var(--fill);
+}
+
+/* ------------------------------
+   3) Header & Nav
+--------------------------------*/
+header h1{
+  display: inline-block;
+  padding: .2rem .6rem;
+  border-radius: 14px;
+  background: var(--brand-weak);
+  color: color-mix(in srgb, var(--brand) 85%, var(--text));
+  box-shadow: var(--shadow);
+}
+
+header p { margin-top: var(--space-2); color: var(--muted); }
+
+nav{
+  margin-top: var(--space-4);
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem .75rem;
+}
+nav a{
+  display: inline-block;
+  padding: .4rem .7rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg);
+  box-shadow: 0 1px 0 rgba(2,6,23,.06);
+}
+nav a:hover{
+  background: var(--brand-weak);
+  text-decoration: none;
+}
+nav a:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 var(--ring) var(--focus);
+}
+
+/* ------------------------------
+   4) Sections as Cards
+--------------------------------*/
+section{
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-6);
+  box-shadow: var(--shadow);
+}
+
+/* Figure */
+figure{
+  background: var(--fill);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+}
+
+figcaption{
+  margin-top: var(--space-2);
+  color: var(--muted);
+  text-align: center;
+}
+
+
+/* Figure 박스 자체는 가운데, 내부 img도 가운데 */
+#about figure{
+  margin: 0 auto var(--space-4); /* 섹션 폭 안에서 figure 중앙 */
+  text-align: center;            /* 캡션 중앙 정렬 */
+}
+
+#about figure > img{
+  display: block;                /* 인라인 여백 제거 */
+  margin-inline: auto;           /* ← 핵심: 가로 중앙 정렬 */
+  /* max-width: 100%; height: auto;  // 이미 전역 규칙에 있으니 생략 가능 */
+}
+
+
+/* ------------------------------
+   5) Tables (Accounts / Transactions / Rates)
+--------------------------------*/
+table{
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+}
+caption{
+  caption-side: top;
+  text-align: left;
+  color: var(--muted);
+  padding: var(--space-3) 0;
+}
+thead th{
+  background: color-mix(in srgb, var(--fill) 70%, transparent);
+  color: var(--muted);
+  font-weight: 700;
+  text-align: left;
+}
+th, td{
+  padding: .85rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+tbody tr:nth-child(odd){
+  background: color-mix(in srgb, var(--fill) 40%, transparent);
+}
+tbody tr:hover{
+  background: color-mix(in srgb, var(--brand-weak) 35%, transparent);
+}
+tfoot td{
+  font-weight: 700;
+}
+td strong{ font-weight: 800; }
+
+/* Scroll on narrow screens */
+@media (max-width: 560px){
+  table{ display: block; overflow-x: auto; white-space: nowrap; }
+}
+
+/* ------------------------------
+   6) Lists & Definition Lists
+--------------------------------*/
+ul, ol{ padding-left: 1.25rem; }
+dl{ display: grid; grid-template-columns: 1fr 2fr; gap: .25rem .75rem; }
+dt{ font-weight: 700; color: var(--muted); }
+dd{ margin: 0; }
+
+/* ------------------------------
+   7) Forms
+--------------------------------*/
+form { display: grid; gap: var(--space-4); }
+fieldset{
+  margin: 0; padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--fill);
+}
+legend{
+  padding: 0 .5rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+label{ display: inline-block; font-weight: 600; margin-bottom: .35rem; }
+input, select, textarea{
+  width: 100%;
+  padding: .7rem .8rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--text);
+  outline: none;
+  box-shadow: inset 0 1px 0 rgba(2,6,23,.05);
+}
+input::placeholder, textarea::placeholder{ color: color-mix(in srgb, var(--muted) 70%, transparent); }
+
+input:focus-visible, select:focus-visible, textarea:focus-visible{
+  border-color: var(--focus);
+  box-shadow: 0 0 0 var(--ring) var(--focus);
+}
+
+input[type="checkbox"], input[type="radio"]{
+  width: 1rem; height: 1rem; margin-right: .4rem; vertical-align: middle;
+}
+
+/* Buttons */
+button, .btn{
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: .5rem;
+  padding: .65rem 1rem;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--brand) 40%, var(--border));
+  background: linear-gradient(180deg, color-mix(in srgb, var(--brand) 15%, var(--bg)), color-mix(in srgb, var(--brand) 5%, var(--bg)));
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 700;
+  box-shadow: var(--shadow);
+}
+button:hover, .btn:hover{
+  background: color-mix(in srgb, var(--brand-weak) 55%, var(--bg));
+}
+button[type="submit"]{
+  background: linear-gradient(180deg, color-mix(in srgb, var(--brand) 25%, var(--bg)), color-mix(in srgb, var(--brand) 15%, var(--bg)));
+  color: #fff;
+  border-color: color-mix(in srgb, var(--brand) 70%, var(--border));
+}
+button[type="submit"]:hover{
+  background: color-mix(in srgb, var(--brand) 70%, #000 0%);
+}
+button[type="reset"]{
+  border-color: var(--border);
+  background: color-mix(in srgb, var(--fill) 90%, transparent);
+}
+
+/* ------------------------------
+   8) Utilities
+--------------------------------*/
+#top { scroll-behavior: smooth; }
+a[href^="#"]{ scroll-behavior: smooth; }
+
+address{
+  font-style: normal;
+  background: var(--fill);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+}
+
+.mark, mark{
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
+  padding: 0 .25em;
+  border-radius: 6px;
+}
+
+footer{
+  color: var(--muted);
+  display: grid;
+  gap: .5rem;
+  text-align: center;
+}
+
+/* ------------------------------
+   9) Print (simple)
+--------------------------------*/
+@media print{
+  nav, hr, button, .btn { display: none !important; }
+  section, figure, table, address {
+    box-shadow: none !important; background: #fff !important; border-color: #ddd !important;
+  }
+}

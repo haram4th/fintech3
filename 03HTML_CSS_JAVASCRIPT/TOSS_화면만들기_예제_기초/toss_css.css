@@ -1,0 +1,97 @@
+:root {
+  --bg: #f3f5f7;
+  --card: #fff;
+  --text: #121418;
+  --blue: #2f6df6;
+  --line: #e7ebf0;
+  --radius: 20px;
+}
+
+* { box-sizing: border-box; margin:0; padding:0; }
+body {
+  font-family: Inter, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+.app {
+  max-width: 420px;
+  margin: 24px auto;
+  padding: 16px;
+  background: #f9fafc;
+  border-radius: 32px;
+}
+
+.statusbar {
+  display: flex; justify-content: space-between;
+  font-weight: 600; font-size: 14px;
+}
+.pill {
+  background:#e9eef7; border-radius:999px;
+  padding:4px 8px; font-size:13px;
+}
+.header-row {
+  display:flex; justify-content:space-between; margin:8px 0 12px;
+}
+
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 18px; margin-top:12px;
+  box-shadow:0 8px 24px rgba(16,24,40,.06);
+}
+.account-main {
+  display:flex; justify-content:space-between;
+}
+.balance {
+  font-size:28px; font-weight:800;
+}
+.btn {
+  background:#eef3ff; color:var(--blue);
+  border-radius:14px; padding:8px 14px;
+  font-weight:800;
+}
+.row {
+  display:flex; justify-content:space-between;
+  border-top:1px dashed var(--line);
+  padding-top:12px; margin-top:12px;
+}
+
+.section-title {
+  font-weight:800; margin-bottom:10px;
+}
+.list .item {
+  display:flex; justify-content:space-between;
+  padding:12px 0; border-bottom:1px solid var(--line);
+}
+
+
+.small-card {
+  display:flex; justify-content:space-between;
+  align-items:center;
+  background:var(--card);
+  border-radius:var(--radius);
+  padding:16px; margin-top:12px;
+}
+.small-card .big { font-size:24px; font-weight:900; }
+.badge {
+  background:#eef3ff; color:var(--blue);
+  border-radius:12px; padding:6px 12px;
+}
+
+.navbar {
+  position:sticky; bottom:0;
+  display:flex; justify-content:space-around;
+  border-top:1px solid var(--line);
+  background:#fff; padding:12px 0;
+}
+.navitem { font-size:12px; font-weight:700; }
+.navitem.active { color:var(--blue); }
+
+.balance {
+  white-space:nowrap;
+  font-size:clamp(20px, 10cqi, 28px);
+}
+.big {
+  white-space:nowrap;
+  font-size:clamp(18px, 9cqi, 24px);
+}
