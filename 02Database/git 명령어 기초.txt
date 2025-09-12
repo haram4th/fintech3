@@ -1,0 +1,6 @@
+c:\fintech cmd창 열기
+git add .
+git status
+git commit -m "html 공부"
+
+git push
