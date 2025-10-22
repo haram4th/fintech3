@@ -21,4 +21,13 @@ def db_connect(dbname):
 def load_data(dbname, table_name):
     conn = db_connect(dbname)
     data = pd.read_sql(table_name, con=conn)
+    conn.close()
     return data        
+
+def to_db(dbname, table_name, df):
+    conn = db_connect(dbname)
+    df.to_sql(table_name, con=conn, index=False, if_exists="append")
+    conn.close()
+    return
+    
+
