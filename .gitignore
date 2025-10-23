@@ -4,3 +4,7 @@
 *.xlsx
 .env
 .env*
+build/
+dist/
+*.spec
+*.exe

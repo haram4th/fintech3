@@ -5,7 +5,7 @@ from datetime import datetime
 from sqlalchemy import create_engine, text
 import pymysql
 pymysql.install_as_MySQLdb()
-load_dotenv(dotenv_path="./data/.env_db")
+load_dotenv()
 
 db_id = os.getenv("id")
 db_pw = os.getenv("pw")
@@ -13,10 +13,10 @@ addr = os.getenv("addr")
 port = os.getenv("port")
 
 def db_connect(dbname):
-    engine_root = create_engine(f"mysql+pymysql://{db_id}:{db_pw}@{addr}:{port}")
-    with engine_root.connect() as conn:
+    check_engine = create_engine(f"mysql+pymysql://{db_id}:{db_pw}@{addr}:{port}")
+    with check_engine.connect() as conn:
         conn.execute(text(f"create database if not exists {dbname}"))
-        print(f"{dbname} 데이터베이스 확인/생성 완료")
+        print(f"{dbname} 데이터베이스 생성/확인 완료")
     
     engine = create_engine(f"mysql+pymysql://{db_id}:{db_pw}@{addr}:{port}/{dbname}")
     conn = engine.connect()
@@ -33,6 +33,6 @@ def to_db(dbname, table_name, df):
     conn = db_connect(dbname)
     df.to_sql(table_name, con=conn, index=False, if_exists="append")
     conn.close()
-    return print(f"{dbname}.{table_name} 데이터 저장 완료")
+    return
     
 
