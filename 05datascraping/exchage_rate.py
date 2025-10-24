@@ -39,12 +39,19 @@ def main():
     # DB에 수집하는 날짜의 데이터가 있는지 확인
     conn = db_connect("ex_rate")
     try:
-        conn.execute(text(f"select * from ex_rate where `날짜`={date1}"))
-        print(f"{date1} 환율 정보가 이미 DB에 있습니다.")
-        conn.close()
+        
+        query = text(f"SELECT * FROM ex_rate WHERE 날짜 = '{date1}'")
+        result = conn.execute(query).fetchone()
+
+        if result:
+            print(f"{date1} 환율 정보가 이미 DB에 있습니다.")
+        else:
+            print(f"{date1} 환율 정보가 DB에 없으므로 수집합니다.")
+            to_db("ex_rate", "ex_rate", df)
     except:
-        print(f"{date1} 환율 정보가 DB에 없으므로 수집합니다.")
         to_db("ex_rate", "ex_rate", df)
+    finally:
+        conn.close()
 
 
 if __name__ == "__main__":
