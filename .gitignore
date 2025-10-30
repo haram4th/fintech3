@@ -1,5 +1,6 @@
 .ipynb_checkpoints
 *.csv
+*.tsv
 *.json
 *.xlsx
 .env
@@ -8,3 +9,6 @@ build/
 dist/
 *.spec
 *.exe
+*.jpg
+*.png
+*.htm
