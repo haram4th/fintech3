@@ -15,4 +15,4 @@ dist/
 *.htm
 autogluon*
 catboost*
-.keras
+*.keras
