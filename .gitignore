@@ -18,3 +18,4 @@ catboost*
 *.keras
 *.tflite
 model/
+*.wav
