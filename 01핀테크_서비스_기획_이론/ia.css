@@ -1,0 +1,251 @@
+/* 기본 리셋 */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR",
+                 "Apple SD Gothic Neo", "맑은 고딕", sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    background-color: #f5f7fb;
+    color: #111827;
+}
+
+/* 페이지 레이아웃 */
+body {
+    padding: 24px;
+}
+
+.page-header, .page-footer {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.page-header h1 {
+    font-size: 24px;
+    margin-bottom: 4px;
+}
+
+.page-header .subtitle {
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.page-footer {
+    margin-top: 40px;
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+/* 섹션 공통 */
+.section {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 4px rgba(15, 23, 42, 0.06);
+}
+
+.section h2 {
+    font-size: 18px;
+    margin-bottom: 12px;
+    border-left: 4px solid #2563eb;
+    padding-left: 8px;
+}
+
+.section h3 {
+    font-size: 15px;
+    margin-top: 12px;
+    margin-bottom: 6px;
+    color: #111827;
+}
+
+.section h4 {
+    font-size: 14px;
+    margin-bottom: 6px;
+    color: #111827;
+}
+
+/* 카드 */
+.card {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 12px 14px 14px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: #f9fafb;
+}
+
+.card h3 {
+    margin-bottom: 8px;
+}
+
+/* 텍스트/리스트 */
+p {
+    margin-bottom: 8px;
+}
+
+ul, ol {
+    padding-left: 18px;
+    margin-bottom: 8px;
+}
+
+li + li {
+    margin-top: 2px;
+}
+
+/* 테이블 */
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 6px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    background-color: #ffffff;
+}
+
+thead {
+    background-color: #eff3fb;
+}
+
+th, td {
+    border: 1px solid #e5e7eb;
+    padding: 6px 8px;
+    vertical-align: top;
+}
+
+th {
+    font-weight: 600;
+    text-align: left;
+    color: #111827;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9fafb;
+}
+
+table thead th:first-child,
+table tbody td:first-child {
+    white-space: nowrap;
+}
+
+/* IA 트리 구조 스타일 */
+.ia-tree {
+    margin-top: 8px;
+    padding: 10px 12px;
+    background-color: #f3f4ff;
+    border-radius: 8px;
+    border: 1px dashed #c7d2fe;
+    font-size: 13px;
+}
+
+.ia-tree ul {
+    list-style: none;
+    padding-left: 18px;
+    position: relative;
+    margin-bottom: 4px;
+}
+
+.ia-tree li {
+    position: relative;
+    padding-left: 8px;
+    margin-bottom: 4px;
+}
+
+/* 세로 줄 */
+.ia-tree ul::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 4px;
+    bottom: 0;
+    width: 1px;
+    background-color: #d1d5db;
+}
+
+/* 가로 줄 + 노드 */
+.ia-tree li::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 4px;
+    width: 10px;
+    height: 1px;
+    background-color: #d1d5db;
+}
+
+.ia-tree .ia-root > li::before {
+    /* 루트 상위 줄 제거 */
+    display: none;
+}
+
+.ia-tree .ia-root {
+    padding-left: 0;
+}
+
+.ia-tree .ia-root::before {
+    display: none;
+}
+
+/* Flow 카드 */
+.flow-card ol {
+    counter-reset: flow-step;
+    list-style: none;
+    padding-left: 0;
+}
+
+.flow-card ol li {
+    counter-increment: flow-step;
+    margin: 4px 0;
+    padding-left: 26px;
+    position: relative;
+}
+
+.flow-card ol li::before {
+    content: counter(flow-step);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 999px;
+    border: 1px solid #2563eb;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #2563eb;
+    background-color: #eff6ff;
+}
+
+/* 링크 기본 */
+a {
+    color: #2563eb;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+    body {
+        padding: 12px;
+    }
+
+    .section {
+        padding: 16px;
+    }
+
+    .page-header h1 {
+        font-size: 20px;
+    }
+}

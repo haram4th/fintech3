@@ -1,0 +1,445 @@
+/* 기본 설정 */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    background-color: #f5f7fb;
+    color: #111827;
+    line-height: 1.5;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+}
+
+/* 공통 레이아웃 */
+.header {
+    background: linear-gradient(120deg, #2563eb, #0ea5e9);
+    color: #ffffff;
+    padding: 24px 16px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.header__inner {
+    max-width: 1080px;
+    margin: 0 auto;
+}
+
+.header__title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.header__subtitle {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    margin-bottom: 12px;
+}
+
+.header__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 0.85rem;
+}
+
+.header__nav a {
+    color: #e0f2fe;
+    text-decoration: none;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background-color: rgba(15,23,42,0.25);
+    border: 1px solid rgba(148,163,184,0.3);
+}
+
+.header__nav a:hover {
+    background-color: rgba(15,23,42,0.45);
+}
+
+.main {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 24px 16px 40px;
+}
+
+.section {
+    margin-bottom: 24px;
+}
+
+.section__title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    padding-left: 4px;
+    border-left: 4px solid #2563eb;
+}
+
+/* 카드 */
+.card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 16px 18px;
+    box-shadow: 0 10px 25px rgba(15,23,42,0.05);
+    border: 1px solid #e5e7eb;
+    margin-bottom: 12px;
+}
+
+.card h3 {
+    font-size: 1rem;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.card--grid-2 {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+}
+
+.card--grid-3 {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+}
+
+@media (min-width: 768px) {
+    .card--grid-2 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .card--grid-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+/* 리스트 스타일 */
+.list {
+    list-style: none;
+    font-size: 0.9rem;
+}
+
+.list li {
+    margin-bottom: 4px;
+    position: relative;
+    padding-left: 14px;
+}
+
+.list li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: #2563eb;
+    font-size: 0.9rem;
+}
+
+.list--bullet li::before {
+    content: "–";
+}
+
+.list--number {
+    counter-reset: number;
+}
+
+.list--number li {
+    padding-left: 20px;
+}
+
+.list--number li::before {
+    counter-increment: number;
+    content: counter(number) ".";
+    color: #2563eb;
+    font-weight: 600;
+}
+
+/* 테이블 */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+}
+
+.table th,
+.table td {
+    border: 1px solid #e5e7eb;
+    padding: 6px 8px;
+    text-align: left;
+}
+
+.table thead {
+    background-color: #eff6ff;
+}
+
+.table--journey td:nth-child(1) {
+    font-weight: 600;
+}
+
+/* 페르소나 박스 */
+.persona h3 {
+    margin-top: 4px;
+}
+
+/* 와이어프레임 전체 그리드 */
+.wireframe-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+}
+
+@media (min-width: 960px) {
+    .wireframe-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* 개별 와이어프레임 */
+.wireframe-screen {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 12px 12px 10px;
+    border: 1px dashed #cbd5f5;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.wireframe-screen__title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+/* 모바일 폰 프레임 */
+.wireframe-phone {
+    border-radius: 24px;
+    border: 2px solid #d1d5db;
+    background-color: #f9fafb;
+    width: 100%;
+    max-width: 260px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.phone-header {
+    padding: 8px 10px;
+    background: linear-gradient(120deg, #1d4ed8, #0ea5e9);
+    color: #ffffff;
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+.phone-body {
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-height: 180px;
+}
+
+.phone-footer {
+    padding: 6px 10px;
+    font-size: 0.7rem;
+    text-align: center;
+    background-color: #e5e7eb;
+}
+
+/* 탭 푸터 */
+.phone-footer--tabs {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 0.7rem;
+}
+
+.phone-footer--tabs .tab {
+    padding: 4px 6px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+}
+
+.phone-footer--tabs .tab.active {
+    border-color: #1d4ed8;
+    background-color: #eff6ff;
+}
+
+/* 입력 푸터 */
+.phone-footer--input {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 4px;
+}
+
+.input-placeholder {
+    flex: 1;
+    text-align: left;
+    padding: 4px 6px;
+    border-radius: 999px;
+    background-color: #f3f4f6;
+}
+
+.btn-placeholder {
+    padding: 4px 8px;
+    border-radius: 999px;
+    background-color: #2563eb;
+    color: #ffffff;
+    font-size: 0.7rem;
+}
+
+/* 블록 요소 */
+.phone-block {
+    border-radius: 8px;
+    border: 1px dashed #cbd5f5;
+    padding: 6px;
+    font-size: 0.7rem;
+    background-color: #f9fafb;
+}
+
+.phone-block--large {
+    min-height: 64px;
+}
+
+.phone-block--graph {
+    min-height: 72px;
+}
+
+.phone-block--video {
+    min-height: 90px;
+}
+
+.phone-block--qna {
+    min-height: 40px;
+}
+
+.phone-block--chat {
+    min-height: 50px;
+}
+
+.phone-block--success {
+    background-color: #ecfdf5;
+    border-color: #6ee7b7;
+}
+
+.phone-block--summary {
+    background-color: #f9fafb;
+}
+
+.phone-block--actions {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.phone-block--row {
+    display: flex;
+    gap: 6px;
+}
+
+.phone-block--list {
+    min-height: 40px;
+}
+
+.phone-block--small {
+    opacity: 0.8;
+}
+
+/* 플레이스홀더 스타일 */
+.placeholder-text {
+    color: #4b5563;
+}
+
+.placeholder-pill {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 999px;
+    border: 1px dashed #9ca3af;
+    font-size: 0.7rem;
+    color: #4b5563;
+}
+
+.placeholder-chip {
+    display: inline-block;
+    padding: 3px 6px;
+    border-radius: 999px;
+    border: 1px solid #93c5fd;
+    background-color: #eff6ff;
+    font-size: 0.7rem;
+}
+
+/* 와이어프레임 설명 */
+.wireframe-notes {
+    list-style: none;
+    font-size: 0.8rem;
+    margin-top: 8px;
+    padding-left: 0;
+}
+
+.wireframe-notes li {
+    margin-bottom: 3px;
+    padding-left: 12px;
+    position: relative;
+}
+
+.wireframe-notes li::before {
+    content: "※";
+    position: absolute;
+    left: 0;
+    color: #6366f1;
+}
+
+/* 푸터 */
+.footer {
+    border-top: 1px solid #e5e7eb;
+    padding: 12px 16px 20px;
+    background-color: #f9fafb;
+}
+
+.footer__inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    font-size: 0.8rem;
+    color: #6b7280;
+}
+
+.embed-frame {
+  width: 100%;
+  min-height: 600px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+/* ========= Embedded Wireframe Preview ========= */
+.wireframe-embed {
+  width: 420px;          /* 모바일 실제 폭보다 약간 여유 */
+  height: 760px;         /* 사파리/iPhone 화면 비율 */
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  background: #ffffff;
+  display: block;
+  margin: 0 auto;        /* 가운데 정렬 */
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+
+.screen {
+  padding-bottom: 64px;        /* 하단 탭바 공간 */
+  max-width: 390px;            /* 모바일 기준 폭 */
+  margin: 0 auto;              /* 가운데 정렬 */
+}
+
+/* 화면 안쪽 컨텐츠 영역 */
+.screen__content {
+  padding: 12px 12px 80px;
+  max-width: 390px;            /* 컨텐츠도 동일 폭 */
+  margin: 0 auto;              /* 가운데 정렬 */
+}

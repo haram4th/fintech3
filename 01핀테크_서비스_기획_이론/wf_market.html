@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>WF-03 마켓 화면</title>
+  <link rel="stylesheet" href="styles.css">
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+<div class="mobile-container">
+<div id="root"></div>
+</div>
+<script type="text/babel" data-presets="react">
+const API_BASE = "http://localhost:8000";
+
+function AppBar({ title }) {
+  return (
+    <header className="appbar">
+      <div className="appbar__title">{title}</div>
+      <div className="appbar__actions">
+        <button className="icon-button">🔍</button>
+        <button className="icon-button">🔔</button>
+      </div>
+    </header>
+  );
+}
+
+function MarketScreen() {
+  const [items, setItems] = React.useState([]);
+  const [category, setCategory] = React.useState("전체");
+  const [selected, setSelected] = React.useState(null);
+
+  const loadItems = (cat) => {
+    const query = cat && cat !== "전체" ? `?category=${encodeURIComponent(cat)}` : "";
+    fetch(`${API_BASE}/market/items${query}`)
+      .then(res => res.json())
+      .then(setItems)
+      .catch(console.error);
+  };
+
+  React.useEffect(() => { loadItems(category); }, [category]);
+
+  const categories = ["전체", "공모주", "ETF", "채권", "리츠"];
+
+  return (
+    <div className="screen">
+      <AppBar title="마켓" />
+      <div className="screen__content">
+        <div className="chip-row">
+          {categories.map(cat => (
+            <button
+              key={cat}
+              className={"chip" + (category === cat ? " chip--active" : "")}
+              onClick={() => setCategory(cat)}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        <section className="card">
+          <h2>상품 목록</h2>
+          <ul className="market-list">
+            {items.map(item => (
+              <li
+                key={item.id}
+                className="market-list__item"
+                onClick={() => setSelected(item)}
+              >
+                <div className="market-list__title">{item.name}</div>
+                <div className="market-list__meta">
+                  <span>{item.category}</span>
+                  <span>{item.code}</span>
+                  <span className={"risk risk--" + item.risk_level}>
+                    {item.risk_level}
+                  </span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {selected && (
+          <div className="modal" onClick={() => setSelected(null)}>
+            <div className="modal__content" onClick={e => e.stopPropagation()}>
+              <h3>{selected.name}</h3>
+              <p className="modal__code">{selected.code}</p>
+              <p>{selected.description}</p>
+              <p>
+                예상 수익률:{" "}
+                {selected.expected_yield != null ? selected.expected_yield : "-"}%
+              </p>
+              <p className={"risk risk--" + selected.risk_level}>
+                위험도: {selected.risk_level}
+              </p>
+              <button className="btn" onClick={() => setSelected(null)}>닫기</button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<MarketScreen />);
+</script>
+</body>
+</html>

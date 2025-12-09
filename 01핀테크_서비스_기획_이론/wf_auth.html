@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>WF-01 로그인 / 회원가입</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- React CDN -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+<div class="mobile-container">
+    <div id="root"></div>
+</div>
+
+<script type="text/babel" data-presets="react">
+const API_BASE = "http://localhost:8000";
+
+/** 로그인 / 회원가입 화면 (기존 구현 그대로) */
+function AuthScreen({ onLogin }) {
+  const [mode, setMode] = React.useState("login"); // "login" | "signup"
+
+  // 로그인 상태
+  const [loginEmail, setLoginEmail] = React.useState("demo@finuts.app");
+  const [loginPassword, setLoginPassword] = React.useState("1234");
+  const [loginError, setLoginError] = React.useState("");
+
+  // 회원가입 상태
+  const [signupNickname, setSignupNickname] = React.useState("");
+  const [signupEmail, setSignupEmail] = React.useState("");
+  const [signupPassword, setSignupPassword] = React.useState("");
+  const [signupPasswordConfirm, setSignupPasswordConfirm] = React.useState("");
+  const [agreeTerms, setAgreeTerms] = React.useState(false);
+  const [signupError, setSignupError] = React.useState("");
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoginError("");
+    try {
+      const res = await fetch(API_BASE + "/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: loginEmail, password: loginPassword })
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.detail || "로그인 실패");
+      }
+      const data = await res.json();
+      onLogin && onLogin(data); // { user_id, nickname }
+    } catch (err) {
+      setLoginError(err.message);
+    }
+  };
+
+  const handleSignup = (e) => {
+    e.preventDefault();
+    setSignupError("");
+
+    if (!signupNickname || !signupEmail || !signupPassword || !signupPasswordConfirm) {
+      setSignupError("모든 필드를 입력해 주세요.");
+      return;
+    }
+    if (signupPassword !== signupPasswordConfirm) {
+      setSignupError("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+      return;
+    }
+    if (!agreeTerms) {
+      setSignupError("필수 약관에 동의해 주세요.");
+      return;
+    }
+
+    const fakeUser = {
+      user_id: 2,
+      nickname: signupNickname
+    };
+    onLogin && onLogin(fakeUser);
+  };
+
+  return (
+    <div className="screen screen--center">
+      <h1 className="logo">Finuts V2.0</h1>
+      <p className="login__subtitle">
+        당신의 자산을 한 번에, 라이브로 쉽게 이해하세요.
+      </p>
+
+      {/* 로그인 / 회원가입 탭 */}
+      <div className="auth-toggle card">
+        <button
+          className={"auth-toggle__btn" + (mode === "login" ? " auth-toggle__btn--active" : "")}
+          onClick={() => setMode("login")}
+        >
+          로그인
+        </button>
+        <button
+          className={"auth-toggle__btn" + (mode === "signup" ? " auth-toggle__btn--active" : "")}
+          onClick={() => setMode("signup")}
+        >
+          회원가입
+        </button>
+      </div>
+
+      {mode === "login" ? (
+        <form className="card login__form" onSubmit={handleLogin}>
+          <label className="form-field">
+            <span>이메일</span>
+            <input
+              value={loginEmail}
+              onChange={(e) => setLoginEmail(e.target.value)}
+            />
+          </label>
+          <label className="form-field">
+            <span>비밀번호</span>
+            <input
+              type="password"
+              value={loginPassword}
+              onChange={(e) => setLoginPassword(e.target.value)}
+            />
+          </label>
+          {loginError && <div className="form-error">{loginError}</div>}
+          <button type="submit" className="btn btn--primary">로그인</button>
+          <div className="login__hint">데모 계정: demo@finuts.app / 1234</div>
+        </form>
+      ) : (
+        <form className="card login__form" onSubmit={handleSignup}>
+          <label className="form-field">
+            <span>닉네임</span>
+            <input
+              value={signupNickname}
+              onChange={(e) => setSignupNickname(e.target.value)}
+              placeholder="예: 지현"
+            />
+          </label>
+          <label className="form-field">
+            <span>이메일</span>
+            <input
+              type="email"
+              value={signupEmail}
+              onChange={(e) => setSignupEmail(e.target.value)}
+              placeholder="you@example.com"
+            />
+          </label>
+          <label className="form-field">
+            <span>비밀번호</span>
+            <input
+              type="password"
+              value={signupPassword}
+              onChange={(e) => setSignupPassword(e.target.value)}
+            />
+          </label>
+          <label className="form-field">
+            <span>비밀번호 확인</span>
+            <input
+              type="password"
+              value={signupPasswordConfirm}
+              onChange={(e) => setSignupPasswordConfirm(e.target.value)}
+            />
+          </label>
+
+          <label className="form-field form-field--row">
+            <input
+              type="checkbox"
+              checked={agreeTerms}
+              onChange={(e) => setAgreeTerms(e.target.checked)}
+            />
+            <span>필수 약관에 동의합니다.</span>
+          </label>
+
+          {signupError && <div className="form-error">{signupError}</div>}
+          <button type="submit" className="btn btn--primary">회원가입 완료</button>
+        </form>
+      )}
+    </div>
+  );
+}
+
+/** 프리뷰용 루트 */
+function Preview() {
+  return <AuthScreen onLogin={(user) => console.log("logged in:", user)} />;
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<Preview />);
+</script>
+
+</body>
+</html>

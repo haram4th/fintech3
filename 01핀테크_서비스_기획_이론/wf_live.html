@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>WF-04 라이브 화면</title>
+  <link rel="stylesheet" href="styles.css">
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+  <div class="mobile-container">
+<div id="root"></div>
+</div>
+
+<script type="text/babel" data-presets="react">
+const API_BASE = "http://localhost:8000";
+
+function AppBar({ title }) {
+  return (
+    <header className="appbar">
+      <div className="appbar__title">{title}</div>
+      <div className="appbar__actions">
+        <button className="icon-button">🔍</button>
+        <button className="icon-button">🔔</button>
+      </div>
+    </header>
+  );
+}
+
+function LiveScreen() {
+  const [live, setLive] = React.useState([]);
+  const [status, setStatus] = React.useState("all");
+
+  const load = (st) => {
+    const query = st && st !== "all" ? `?status=${st}` : "";
+    fetch(`${API_BASE}/live/streams${query}`)
+      .then(res => res.json())
+      .then(setLive)
+      .catch(console.error);
+  };
+
+  React.useEffect(() => { load(status); }, [status]);
+
+  const tabs = [
+    { id: "all", label: "전체" },
+    { id: "ongoing", label: "진행중" },
+    { id: "upcoming", label: "예정" },
+    { id: "replay", label: "다시보기" },
+  ];
+
+  return (
+    <div className="screen">
+      <AppBar title="라이브" />
+      <div className="screen__content">
+        <div className="chip-row">
+          {tabs.map(t => (
+            <button
+              key={t.id}
+              className={"chip" + (status === t.id ? " chip--active" : "")}
+              onClick={() => setStatus(t.id)}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+
+        <section className="card">
+          <h2>라이브 목록</h2>
+          <ul className="live-list">
+            {live.map(l => (
+              <li key={l.id} className={"live-list__item live-list__item--" + l.status}>
+                <div className="live-list__title">{l.title}</div>
+                <div className="live-list__meta">
+                  <span>{l.host}</span>
+                  <span>{new Date(l.start_time).toLocaleString()}</span>
+                  <span className={"badge badge--" + l.status}>{l.status}</span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<LiveScreen />);
+</script>
+</body>
+</html>

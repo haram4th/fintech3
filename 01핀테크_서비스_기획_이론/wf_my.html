@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>WF-06 마이 화면</title>
+  <link rel="stylesheet" href="styles.css">
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+  <div class="mobile-container">
+<div id="root"></div>
+</div>
+<script type="text/babel" data-presets="react">
+const API_BASE = "http://localhost:8000";
+
+function AppBar({ title }) {
+  return (
+    <header className="appbar">
+      <div className="appbar__title">{title}</div>
+      <div className="appbar__actions">
+        <button className="icon-button">🔍</button>
+        <button className="icon-button">🔔</button>
+      </div>
+    </header>
+  );
+}
+
+function MyScreen({ user, onLogout }) {
+  const [profile, setProfile] = React.useState(null);
+
+  React.useEffect(() => {
+    fetch(API_BASE + "/me/profile")
+      .then(res => res.json())
+      .then(setProfile)
+      .catch(console.error);
+  }, []);
+
+  return (
+    <div className="screen">
+      <AppBar title="마이" />
+      <div className="screen__content">
+        <section className="card">
+          <h2>내 프로필</h2>
+          {profile ? (
+            <React.Fragment>
+              <p><strong>{profile.nickname}</strong></p>
+              <p>{profile.email}</p>
+              <button
+                className="btn btn--secondary"
+                onClick={onLogout}
+                style={{ marginTop: "8px" }}
+              >
+                로그아웃
+              </button>
+            </React.Fragment>
+          ) : (
+            <p>불러오는 중...</p>
+          )}
+        </section>
+
+        <section className="card">
+          <h2>팔로우 중인 전문가</h2>
+          <ul className="simple-list">
+            {profile && profile.following_experts && profile.following_experts.map((e) => (
+              <li key={e}>{e}</li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="card">
+          <h2>연동된 금융사</h2>
+          <ul className="simple-list">
+            {profile && profile.linked_institutions && profile.linked_institutions.map((i) => (
+              <li key={i}>{i}</li>
+            ))}
+          </ul>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+function Preview() {
+  const demoUser = { user_id: 1, nickname: "지현" };
+  const fakeLogout = () => alert("로그아웃(프리뷰)");
+  return <MyScreen user={demoUser} onLogout={fakeLogout} />;
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<Preview />);
+</script>
+</body>
+</html>
