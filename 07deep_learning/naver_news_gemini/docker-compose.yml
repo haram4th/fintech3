@@ -1,0 +1,13 @@
+
+services:
+  naver-news-gemini:
+    build: .
+    container_name: naver-news-gemini
+    ports:
+      - "7860:7860"
+    # 호스트의 .env_gemini 파일을 읽어서 컨테이너 환경변수로 넣어줌
+    env_file:
+      - .env_gemini
+    environment:
+      - TZ=Asia/Seoul
+    restart: unless-stopped
