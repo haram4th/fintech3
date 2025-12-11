@@ -1,0 +1,20 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: easyfin-backend
+    ports:
+      - "8000:8000"    # 호스트 8000 → 컨테이너 8000 (API)
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: easyfin-frontend
+    ports:
+      - "3000:80"      # 호스트 8080 → 컨테이너 80 (nginx)
+    depends_on:
+      - backend
+    restart: unless-stopped

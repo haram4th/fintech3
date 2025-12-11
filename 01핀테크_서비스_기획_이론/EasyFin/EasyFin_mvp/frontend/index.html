@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Finuts V2.0 MVP</title>
+    <title>EasyFin V2.0 MVP</title>
     <link rel="stylesheet" href="styles.css">
     <!-- React CDN -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
@@ -58,7 +58,7 @@ function AuthScreen({ onLogin }) {
   const [mode, setMode] = React.useState("login"); // "login" | "signup"
 
   // 로그인 상태
-  const [loginEmail, setLoginEmail] = React.useState("demo@finuts.app");
+  const [loginEmail, setLoginEmail] = React.useState("demo@easyfin.app");
   const [loginPassword, setLoginPassword] = React.useState("1234");
   const [loginError, setLoginError] = React.useState("");
 
@@ -118,7 +118,7 @@ function AuthScreen({ onLogin }) {
 
   return (
     <div className="screen screen--center">
-      <h1 className="logo">Finuts V2.0</h1>
+      <h1 className="logo">EasyFin V2.0</h1>
       <p className="login__subtitle">
         당신의 자산을 한 번에, 라이브로 쉽게 이해하세요.
       </p>

@@ -5,7 +5,7 @@ from typing import List, Optional
 from datetime import datetime
 
 app = FastAPI(
-    title="Finuts V2.0 API (Mock)",
+    title="EasyFin V2.0 API (Mock)",
     description="자산 통합 & 라이브 금융 콘텐츠 서비스 MVP용 Mock API",
     version="0.1.0",
 )
@@ -84,7 +84,7 @@ class Profile(BaseModel):
 # -----------------------------
 
 MOCK_USER = {
-    "email": "demo@finuts.app",
+    "email": "demo@easyfin.app",
     "password": "1234",
     "user_id": 1,
     "nickname": "지현"
