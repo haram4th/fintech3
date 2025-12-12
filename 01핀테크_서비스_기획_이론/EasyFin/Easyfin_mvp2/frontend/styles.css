@@ -59,7 +59,7 @@ a {
   flex-direction: column;
 }
 
-/* 가운데 정렬용 (로그인 등) */
+/* 가운데 정렬 (로그인 등) */
 .screen--center {
   align-items: center;
   justify-content: center;
@@ -118,10 +118,8 @@ a {
 }
 
 /* ===============================
-   4. 로그인 / 회원가입 화면
+   4. 로그인 & 회원가입
    =============================== */
-
-/* 로고 / 서브타이틀 */
 .logo {
   font-size: 26px;
   font-weight: 700;
@@ -135,7 +133,7 @@ a {
   text-align: center;
 }
 
-/* 탭 토글 (로그인 / 회원가입) */
+/* 탭 토글 */
 .auth-toggle {
   display: flex;
   background: #f9fafb;
@@ -164,7 +162,6 @@ a {
   color: #ffffff;
 }
 
-/* 로그인 / 회원가입 폼 */
 .login__form {
   width: 100%;
   max-width: 360px;
@@ -173,17 +170,12 @@ a {
   gap: 12px;
 }
 
-/* form-field 스타일 (기존) */
 .form-field {
   display: flex;
   flex-direction: column;
   gap: 6px;
   width: 100%;
   font-size: 13px;
-}
-
-.form-field span {
-  color: #374151;
 }
 
 .form-field input {
@@ -193,40 +185,24 @@ a {
   font-size: 14px;
 }
 
-/* 단순 input용 공통 (와이어프레임 input 클래스) */
-.input {
-  width: 100%;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
-  padding: 8px 10px;
-  font-size: 14px;
-}
-
-/* 체크박스 가로 정렬 */
 .form-field--row {
   flex-direction: row;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
 }
 
-.form-field--row input[type="checkbox"] {
-  width: auto;
-}
-
-/* 에러 / 힌트 텍스트 */
 .form-error {
   color: #b91c1c;
   font-size: 12px;
 }
 
 .login__hint {
-  margin-top: 4px;
-  font-size: 11px;
+  font-size: 12px;
   color: #6b7280;
 }
 
 /* ===============================
-   5. 버튼 / 칩
+   5. 버튼 & 칩
    =============================== */
 .btn {
   padding: 8px 12px;
@@ -242,24 +218,18 @@ a {
   background: #2563eb;
   border-color: #2563eb;
   color: #ffffff;
-  font-weight: 500;
   padding: 12px;
   font-size: 15px;
+  font-weight: 500;
 }
 
 .btn--secondary {
-  width: 100%;
   background: #f3f4f6;
   border-color: #d1d5db;
   color: #374151;
 }
 
-.btn:disabled {
-  opacity: 0.6;
-  cursor: default;
-}
-
-/* 칩(카테고리, 필터 등) */
+/* 칩 */
 .chip-row {
   display: flex;
   flex-wrap: wrap;
@@ -283,7 +253,7 @@ a {
 }
 
 /* ===============================
-   6. 하단 탭바 (와이어프레임 스타일)
+   6. 하단 네비게이션
    =============================== */
 .bottom-nav {
   display: flex;
@@ -297,9 +267,9 @@ a {
   flex: 1;
   border: none;
   background: transparent;
-  font-size: 11px;
-  cursor: pointer;
+  font-size: 12px;
   color: #6b7280;
+  cursor: pointer;
 }
 
 .bottom-nav__item--active {
@@ -307,17 +277,8 @@ a {
   font-weight: 600;
 }
 
-.bottom-nav__label {
-  display: block;
-}
-
-/* (구 MVP용 tabbar는 사용 안 해도 되지만 남겨둠) */
-.tabbar {
-  display: none;
-}
-
 /* ===============================
-   7. 홈: 자산 요약 / 계좌
+   7. 자산 요약 / 계좌
    =============================== */
 .asset__total {
   font-size: 14px;
@@ -334,7 +295,6 @@ a {
   justify-content: space-between;
 }
 
-/* 계좌 리스트 */
 .account-list {
   list-style: none;
   font-size: 13px;
@@ -356,8 +316,8 @@ a {
 }
 
 .account-list__balance {
-  font-weight: 500;
   color: #111827;
+  font-weight: 600;
 }
 
 /* ===============================
@@ -374,10 +334,6 @@ a {
   cursor: pointer;
 }
 
-.market-list__item:last-child {
-  border-bottom: none;
-}
-
 .market-list__title {
   font-weight: 500;
 }
@@ -387,12 +343,11 @@ a {
   color: #6b7280;
   display: flex;
   gap: 6px;
-  margin-top: 2px;
 }
 
 /* 위험도 배지 */
 .risk {
-  padding: 1px 6px;
+  padding: 2px 6px;
   border-radius: 999px;
   font-size: 10px;
 }
@@ -413,102 +368,18 @@ a {
 }
 
 /* ===============================
-   9. 라이브
+   9. 커뮤니티
    =============================== */
-.live-list {
-  list-style: none;
-  font-size: 13px;
-}
-
-.live-list__item {
-  padding: 6px 0;
-  border-bottom: 1px solid #f3f4f6;
-}
-
-.live-list__title {
-  font-weight: 500;
-}
-
-.live-list__meta {
-  font-size: 11px;
-  color: #6b7280;
-  display: flex;
-  gap: 6px;
-  align-items: center;
-}
-
-/* 라이브 상태 배지 (필요시 재사용) */
-.badge {
-  padding: 1px 6px;
-  border-radius: 999px;
-  font-size: 10px;
-  text-transform: uppercase;
-}
-
-.badge--ongoing {
-  background: #fee2e2;
-  color: #b91c1c;
-}
-
-.badge--upcoming {
-  background: #dbeafe;
-  color: #1d4ed8;
-}
-
-.badge--replay {
-  background: #e5e7eb;
-  color: #374151;
-}
-
-/* ===============================
-   10. 커뮤니티
-   =============================== */
-.form {
-  font-size: 13px;
-}
-
-.form-row {
-  margin-bottom: 8px;
-}
-
-.form-row input,
-.form-row textarea,
-.form-row select {
+.input {
   width: 100%;
-  border-radius: 6px;
+  border-radius: 8px;
   border: 1px solid #d1d5db;
-  padding: 6px 8px;
-  font-size: 13px;
-}
-
-.post-list {
-  list-style: none;
-  font-size: 13px;
-}
-
-.post-list__item + .post-list__item {
-  margin-top: 10px;
-  padding-top: 8px;
-  border-top: 1px solid #f3f4f6;
-}
-
-.post-list__title {
-  font-weight: 500;
-}
-
-.post-list__meta {
-  font-size: 11px;
-  color: #6b7280;
-  display: flex;
-  gap: 6px;
-}
-
-.post-list__content {
-  margin-top: 4px;
+  padding: 8px 10px;
+  font-size: 14px;
 }
 
 /* ===============================
-   11. 마이
+   10. 마이
    =============================== */
 .simple-list {
   list-style: none;
@@ -520,36 +391,27 @@ a {
 }
 
 /* ===============================
-   12. 모달
+   11. 모달
    =============================== */
 .modal {
   position: fixed;
   inset: 0;
   background: rgba(15, 23, 42, 0.4);
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 }
 
 .modal__content {
   background: #ffffff;
-  border-radius: 10px;
-  padding: 14px;
+  padding: 16px;
+  border-radius: 12px;
   width: 90%;
   max-width: 360px;
-  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.4);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
 }
 
 .modal__code {
   font-size: 12px;
   color: #6b7280;
-}
-
-/* ===============================
-   13. 반응형
-   =============================== */
-@media (min-width: 768px) {
-  .screen__content {
-    padding-top: 20px;
-  }
 }

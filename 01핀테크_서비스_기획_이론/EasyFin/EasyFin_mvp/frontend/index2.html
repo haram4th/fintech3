@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>EasyFin V2.0 MVP</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- React CDN -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script crossorigin src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" data-presets="react">
+const API_BASE = "http://localhost:8000";
+
+// ------------------ 공통 컴포넌트 ------------------
+
+function BottomTabBar({ current, onChange }) {
+  const tabs = [
+    { id: "home", label: "홈" },
+    { id: "market", label: "마켓" },
+    { id: "live", label: "라이브" },
+    { id: "community", label: "커뮤니티" },
+    { id: "my", label: "마이" },
+  ];
+  return (
+    <nav className="tabbar">
+      {tabs.map(tab => (
+        <button
+          key={tab.id}
+          className={"tabbar__item" + (current === tab.id ? " tabbar__item--active" : "")}
+          onClick={() => onChange(tab.id)}
+        >
+          {tab.label}
+        </button>
+      ))}
+    </nav>
+  );
+}
+
+function AppBar({ title }) {
+  return (
+    <header className="appbar">
+      <div className="appbar__title">{title}</div>
+      <div className="appbar__actions">
+        <button className="icon-button">🔍</button>
+        <button className="icon-button">🔔</button>
+      </div>
+    </header>
+  );
+}
+
+// ------------------ 로그인 / 회원가입 화면 ------------------
+
+function AuthScreen({ onLogin }) {
+  const [mode, setMode] = React.useState("login"); // "login" | "signup"
+
+  // 로그인 상태
+  const [loginEmail, setLoginEmail] = React.useState("demo@easyfin.app");
+  const [loginPassword, setLoginPassword] = React.useState("1234");
+  const [loginError, setLoginError] = React.useState("");
+
+  // 회원가입 상태 (MVP: 프론트에서만 처리)
+  const [signupNickname, setSignupNickname] = React.useState("");
+  const [signupEmail, setSignupEmail] = React.useState("");
+  const [signupPassword, setSignupPassword] = React.useState("");
+  const [signupPasswordConfirm, setSignupPasswordConfirm] = React.useState("");
+  const [agreeTerms, setAgreeTerms] = React.useState(false);
+  const [signupError, setSignupError] = React.useState("");
+
+  const handleLogin = async function (e) {
+    e.preventDefault();
+    setLoginError("");
+    try {
+      const res = await fetch(API_BASE + "/auth/login", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ email: loginEmail, password: loginPassword })
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.detail || "로그인 실패");
+      }
+      const data = await res.json();
+      onLogin(data);  // { user_id, nickname }
+    } catch (err) {
+      setLoginError(err.message);
+    }
+  };
+
+  const handleSignup = function (e) {
+    e.preventDefault();
+    setSignupError("");
+
+    if (!signupNickname || !signupEmail || !signupPassword || !signupPasswordConfirm) {
+      setSignupError("모든 필드를 입력해 주세요.");
+      return;
+    }
+    if (signupPassword !== signupPasswordConfirm) {
+      setSignupError("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+      return;
+    }
+    if (!agreeTerms) {
+      setSignupError("필수 약관에 동의해 주세요.");
+      return;
+    }
+
+    // 🔹 실제 서비스라면 여기에서 /auth/signup 같은 API를 호출해야 함
+    // 현재는 MVP라서 로컬에서만 "가입 완료" 처리하고 바로 로그인된 상태로 진입
+    const fakeUser = {
+      user_id: 2,
+      nickname: signupNickname
+    };
+    onLogin(fakeUser);
+  };
+
+  return (
+    <div className="screen screen--center">
+      <h1 className="logo">EasyFin V2.0</h1>
+      <p className="login__subtitle">
+        당신의 자산을 한 번에, 라이브로 쉽게 이해하세요.
+      </p>
+
+      {/* 로그인 / 회원가입 탭 */}
+      <div className="auth-toggle card">
+        <button
+          className={"auth-toggle__btn" + (mode === "login" ? " auth-toggle__btn--active" : "")}
+          onClick={function () { setMode("login"); }}
+        >
+          로그인
+        </button>
+        <button
+          className={"auth-toggle__btn" + (mode === "signup" ? " auth-toggle__btn--active" : "")}
+          onClick={function () { setMode("signup"); }}
+        >
+          회원가입
+        </button>
+      </div>
+
+      {mode === "login" ? (
+        <form className="card login__form" onSubmit={handleLogin}>
+          <label className="form-field">
+            <span>이메일</span>
+            <input
+              value={loginEmail}
+              onChange={function (e) { setLoginEmail(e.target.value); }}
+            />
+          </label>
+          <label className="form-field">
+            <span>비밀번호</span>
+            <input
+              type="password"
+              value={loginPassword}
+              onChange={function (e) { setLoginPassword(e.target.value); }}
+            />
+          </label>
+          {loginError && <div className="form-error">{loginError}</div>}
+          <button type="submit" className="btn btn--primary">로그인</button>
+          <div className="login__hint">데모 계정: demo@finuts.app / 1234</div>
+        </form>
+      ) : (
+        <form className="card login__form" onSubmit={handleSignup}>
+          <label className="form-field">
+            <span>닉네임</span>
+            <input
+              value={signupNickname}
+              onChange={function (e) { setSignupNickname(e.target.value); }}
+              placeholder="예: 지현"
+            />
+          </label>
+          <label className="form-field">
+            <span>이메일</span>
+            <input
+              type="email"
+              value={signupEmail}
+              onChange={function (e) { setSignupEmail(e.target.value); }}
+              placeholder="you@example.com"
+            />
+          </label>
+          <label className="form-field">
+            <span>비밀번호</span>
+            <input
+              type="password"
+              value={signupPassword}
+              onChange={function (e) { setSignupPassword(e.target.value); }}
+            />
+          </label>
+          <label className="form-field">
+            <span>비밀번호 확인</span>
+            <input
+              type="password"
+              value={signupPasswordConfirm}
+              onChange={function (e) { setSignupPasswordConfirm(e.target.value); }}
+            />
+          </label>
+
+          <label className="form-field form-field--row">
+            <input
+              type="checkbox"
+              checked={agreeTerms}
+              onChange={function (e) { setAgreeTerms(e.target.checked); }}
+            />
+            <span>필수 약관에 동의합니다.</span>
+          </label>
+
+          {signupError && <div className="form-error">{signupError}</div>}
+          <button type="submit" className="btn btn--primary">회원가입 완료</button>
+        </form>
+      )}
+    </div>
+  );
+}
+
+// ------------------ 홈(대시보드) ------------------
+
+function HomeScreen() {
+  const [summary, setSummary] = React.useState(null);
+  const [accounts, setAccounts] = React.useState([]);
+
+  React.useEffect(() => {
+    fetch(`${API_BASE}/assets/summary`)
+      .then(res => res.json())
+      .then(setSummary);
+    fetch(`${API_BASE}/assets/accounts`)
+      .then(res => res.json())
+      .then(setAccounts);
+  }, []);
+
+  return (
+    <div className="screen">
+      <AppBar title="홈" />
+      <div className="screen__content">
+        <section className="card">
+          <h2>통합 자산 현황</h2>
+          {summary ? (
+  <React.Fragment>
+    <div className="asset__total">
+      총 자산{" "}
+      <strong>{summary.total_amount.toLocaleString()} {summary.currency}</strong>
+    </div>
+    <ul className="asset__breakdown">
+      {Object.entries(summary.breakdown).map(([k, v]) => (
+        <li key={k}>
+          <span>{k}</span>
+          <span>{v.toLocaleString()}원</span>
+        </li>
+      ))}
+    </ul>
+  </React.Fragment>
+) : (
+  <div>불러오는 중...</div>
+)}
+
+        </section>
+
+        <section className="card">
+          <h2>계좌별 요약</h2>
+          <ul className="account-list">
+            {accounts.map(acc => (
+              <li key={acc.id} className="account-list__item">
+                <div className="account-list__title">
+                  {acc.institution} · {acc.name}
+                </div>
+                <div className="account-list__meta">
+                  <span>{acc.type}</span>
+                  <span className="account-list__balance">
+                    {acc.balance.toLocaleString()}원
+                  </span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="card">
+          <h2>추천 라이브</h2>
+          <p>라이브 탭에서 자세히 보기</p>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+// ------------------ 마켓 ------------------
+
+function MarketScreen() {
+  const [items, setItems] = React.useState([]);
+  const [category, setCategory] = React.useState("전체");
+  const [selected, setSelected] = React.useState(null);
+
+  const loadItems = (cat) => {
+    const query = cat && cat !== "전체" ? `?category=${encodeURIComponent(cat)}` : "";
+    fetch(`${API_BASE}/market/items${query}`)
+      .then(res => res.json())
+      .then(setItems);
+  };
+
+  React.useEffect(() => { loadItems(category); }, [category]);
+
+  const categories = ["전체", "공모주", "ETF", "채권", "리츠"];
+
+  return (
+    <div className="screen">
+      <AppBar title="마켓" />
+      <div className="screen__content">
+        <div className="chip-row">
+          {categories.map(cat => (
+            <button
+              key={cat}
+              className={"chip" + (category === cat ? " chip--active" : "")}
+              onClick={() => setCategory(cat)}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        <section className="card">
+          <h2>상품 목록</h2>
+          <ul className="market-list">
+            {items.map(item => (
+              <li
+                key={item.id}
+                className="market-list__item"
+                onClick={() => setSelected(item)}
+              >
+                <div className="market-list__title">{item.name}</div>
+                <div className="market-list__meta">
+                  <span>{item.category}</span>
+                  <span>{item.code}</span>
+                  <span className={"risk risk--" + item.risk_level}>
+                    {item.risk_level}
+                  </span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {selected && (
+          <div className="modal" onClick={() => setSelected(null)}>
+            <div className="modal__content" onClick={e => e.stopPropagation()}>
+              <h3>{selected.name}</h3>
+              <p className="modal__code">{selected.code}</p>
+              <p>{selected.description}</p>
+              <p>예상 수익률: {selected.expected_yield != null ? selected.expected_yield : "-"}%</p>
+              <p className={"risk risk--" + selected.risk_level}>
+                위험도: {selected.risk_level}
+              </p>
+              <button className="btn" onClick={() => setSelected(null)}>닫기</button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ------------------ 라이브 ------------------
+
+function LiveScreen() {
+  const [live, setLive] = React.useState([]);
+  const [status, setStatus] = React.useState("all");
+
+  const load = (st) => {
+    const query = st && st !== "all" ? `?status=${st}` : "";
+    fetch(`${API_BASE}/live/streams${query}`)
+      .then(res => res.json())
+      .then(setLive);
+  };
+
+  React.useEffect(() => { load(status); }, [status]);
+
+  const tabs = [
+    { id: "all", label: "전체" },
+    { id: "ongoing", label: "진행중" },
+    { id: "upcoming", label: "예정" },
+    { id: "replay", label: "다시보기" },
+  ];
+
+  return (
+    <div className="screen">
+      <AppBar title="라이브" />
+      <div className="screen__content">
+        <div className="chip-row">
+          {tabs.map(t => (
+            <button
+              key={t.id}
+              className={"chip" + (status === t.id ? " chip--active" : "")}
+              onClick={() => setStatus(t.id)}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+
+        <section className="card">
+          <h2>라이브 목록</h2>
+          <ul className="live-list">
+            {live.map(l => (
+              <li key={l.id} className={"live-list__item live-list__item--" + l.status}>
+                <div className="live-list__title">{l.title}</div>
+                <div className="live-list__meta">
+                  <span>{l.host}</span>
+                  <span>{new Date(l.start_time).toLocaleString()}</span>
+                  <span className={"badge badge--" + l.status}>{l.status}</span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+// ------------------ 커뮤니티 ------------------
+
+function CommunityScreen({ user }) {
+  const [posts, setPosts] = React.useState([]);
+  const [category, setCategory] = React.useState("전체");
+  const [newPost, setNewPost] = React.useState({
+    title: "",
+    content: "",
+    category: "공모주",
+  });
+  const [loading, setLoading] = React.useState(false);
+
+  const load = (cat) => {
+    const query = cat && cat !== "전체" ? `?category=${encodeURIComponent(cat)}` : "";
+    fetch(`${API_BASE}/community/posts${query}`)
+      .then(res => res.json())
+      .then(setPosts);
+  };
+
+  React.useEffect(() => { load(category); }, [category]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!newPost.title.trim() || !newPost.content.trim()) return;
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE}/community/posts`, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          author: user.nickname,
+          category: newPost.category,
+          title: newPost.title,
+          content: newPost.content
+        })
+      });
+      const data = await res.json();
+      setNewPost({ ...newPost, title: "", content: "" });
+      setPosts(prev => [data, ...prev]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const categories = ["전체", "공모주", "ETF", "채권", "리츠", "자유"];
+
+  return (
+    <div className="screen">
+      <AppBar title="커뮤니티" />
+      <div className="screen__content">
+        <div className="chip-row">
+          {categories.map(cat => (
+            <button
+              key={cat}
+              className={"chip" + (category === cat ? " chip--active" : "")}
+              onClick={() => setCategory(cat)}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        <section className="card">
+          <h2>글 작성</h2>
+          <form className="form" onSubmit={handleSubmit}>
+            <div className="form-row">
+              <label>
+                카테고리
+                <select
+                  value={newPost.category}
+                  onChange={e => setNewPost(p => ({ ...p, category: e.target.value }))}
+                >
+                  <option>공모주</option>
+                  <option>ETF</option>
+                  <option>채권</option>
+                  <option>리츠</option>
+                  <option>자유</option>
+                </select>
+              </label>
+            </div>
+            <div className="form-row">
+              <input
+                placeholder="제목을 입력하세요"
+                value={newPost.title}
+                onChange={e => setNewPost(p => ({ ...p, title: e.target.value }))}
+              />
+            </div>
+            <div className="form-row">
+              <textarea
+                rows="3"
+                placeholder="내용을 입력하세요"
+                value={newPost.content}
+                onChange={e => setNewPost(p => ({ ...p, content: e.target.value }))}
+              />
+            </div>
+            <button className="btn btn--primary" disabled={loading}>
+              {loading ? "등록 중..." : "등록"}
+            </button>
+          </form>
+        </section>
+
+        <section className="card">
+          <h2>게시글</h2>
+          <ul className="post-list">
+            {posts.map(post => (
+              <li key={post.id} className="post-list__item">
+                <div className="post-list__title">{post.title}</div>
+                <div className="post-list__meta">
+                  <span>{post.category}</span>
+                  <span>{post.author}</span>
+                  <span>{new Date(post.created_at).toLocaleString()}</span>
+                </div>
+                <p className="post-list__content">{post.content}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+// ------------------ 마이 ------------------
+
+// ------------------ 마이 ------------------
+
+function MyScreen({ user, onLogout }) {
+  const [profile, setProfile] = React.useState(null);
+
+  React.useEffect(() => {
+    fetch(API_BASE + "/me/profile")
+      .then(function (res) { return res.json(); })
+      .then(setProfile);
+  }, []);
+
+  return (
+    <div className="screen">
+      <AppBar title="마이" />
+      <div className="screen__content">
+        <section className="card">
+          <h2>내 프로필</h2>
+          {profile ? (
+            <React.Fragment>
+              <p><strong>{profile.nickname}</strong></p>
+              <p>{profile.email}</p>
+              <button
+                className="btn btn--secondary"
+                onClick={onLogout}
+                style={{ marginTop: "8px" }}
+              >
+                로그아웃
+              </button>
+            </React.Fragment>
+          ) : (
+            <p>불러오는 중...</p>
+          )}
+        </section>
+
+        <section className="card">
+          <h2>팔로우 중인 전문가</h2>
+          <ul className="simple-list">
+            {profile && profile.following_experts && profile.following_experts.map(function (e) {
+              return <li key={e}>{e}</li>;
+            })}
+          </ul>
+        </section>
+
+        <section className="card">
+          <h2>연동된 금융사</h2>
+          <ul className="simple-list">
+            {profile && profile.linked_institutions && profile.linked_institutions.map(function (i) {
+              return <li key={i}>{i}</li>;
+            })}
+          </ul>
+        </section>
+      </div>
+    </div>
+  );
+}
+
+
+
+// ------------------ 루트 App ------------------
+
+function RootApp() {
+  const [user, setUser] = React.useState(null);
+  const [tab, setTab] = React.useState("home");
+
+  const handleLogout = function () {
+    setUser(null);   // → AuthScreen으로 돌아감
+    setTab("home");  // 탭도 초기화
+  };
+
+  if (!user) {
+    return <AuthScreen onLogin={setUser} />;
+  }
+
+  let screen = null;
+  if (tab === "home") screen = <HomeScreen />;
+  else if (tab === "market") screen = <MarketScreen />;
+  else if (tab === "live") screen = <LiveScreen />;
+  else if (tab === "community") screen = <CommunityScreen user={user} />;
+  else if (tab === "my") screen = <MyScreen user={user} onLogout={handleLogout} />;
+
+  return (
+    <React.Fragment>
+      {screen}
+      <BottomTabBar current={tab} onChange={setTab} />
+    </React.Fragment>
+  );
+}
+
+
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<RootApp />);
+</script>
+</body>
+</html>
